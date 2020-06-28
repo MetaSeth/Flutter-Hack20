@@ -39,7 +39,7 @@ class _CameraPreviewScannerState extends State<CameraPreviewScanner> {
     await _camera.initialize();
 
     _camera.startImageStream((CameraImage image) {
-      widget.onStreaming(image);
+      widget.onStreaming(image,description.sensorOrientation);
       if (_isDetecting) return;
 
       _isDetecting = true;
