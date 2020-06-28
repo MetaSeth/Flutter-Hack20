@@ -38,13 +38,14 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: CameraPreviewScanner(onStreaming: (image, imageRotation) async {
-       List value = await detect(ScannerUtils
-           .createImage(image, imageRotation));
-       if (value != null && value.length > 0){
-         print(value);
-       }
-      },),
+      body: Stack(
+        children: <Widget>[
+          CameraPreviewScanner(onStreaming: (image, imageRotation) async {
+
+          },),
+          Image.asset("images/border.png")
+        ],
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: null,
         tooltip: 'Increment',

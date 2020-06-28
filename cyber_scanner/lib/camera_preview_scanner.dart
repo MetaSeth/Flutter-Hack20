@@ -44,6 +44,7 @@ class _CameraPreviewScannerState extends State<CameraPreviewScanner> {
 
       _isDetecting = true;
     });
+
   }
 
   Widget buildImage() {
