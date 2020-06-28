@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "139385648306",
+    "firebase_url": "https://flutter-hack-900d2.firebaseio.com",
+    "project_id": "flutter-hack-900d2",
+    "storage_bucket": "flutter-hack-900d2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:139385648306:android:f53d6f8032b7d939d905ab",
+        "android_client_info": {
+          "package_name": "com.example.cyber_scanner"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "139385648306-1pl6abg87nk3v3dhuh6fl1vbanmc0295.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.cyber_scanner",
+            "certificate_hash": "099aeaf56b8a1fd250861e3c339c865c16acac0a"
+          }
+        },
+        {
+          "client_id": "139385648306-gd5oarclqkh1k22vb1u7scfmj5ve37or.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCDQ9oU30Q_7NcBlf5-kk1fgx7eWoheUyM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "139385648306-gd5oarclqkh1k22vb1u7scfmj5ve37or.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
