@@ -3,6 +3,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class CameraPreviewScanner extends StatefulWidget {
+  final Function onStreaming;
+
+  const CameraPreviewScanner({Key key, this.onStreaming}) : super(key: key);
   @override
   State<StatefulWidget> createState() => _CameraPreviewScannerState();
 }
@@ -36,6 +39,7 @@ class _CameraPreviewScannerState extends State<CameraPreviewScanner> {
     await _camera.initialize();
 
     _camera.startImageStream((CameraImage image) {
+      widget.onStreaming(image);
       if (_isDetecting) return;
 
       _isDetecting = true;
