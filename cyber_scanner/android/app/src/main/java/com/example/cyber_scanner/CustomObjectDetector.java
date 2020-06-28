@@ -1,5 +1,9 @@
 package com.example.cyber_scanner;
 
+import android.content.Context;
+import android.net.Uri;
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -11,6 +15,7 @@ import com.google.mlkit.vision.objects.ObjectDetection;
 import com.google.mlkit.vision.objects.ObjectDetector;
 import com.google.mlkit.vision.objects.defaults.ObjectDetectorOptions;
 
+import java.io.IOException;
 import java.util.List;
 
 import io.flutter.plugin.common.MethodChannel;
@@ -28,8 +33,9 @@ public class CustomObjectDetector {
       detector = ObjectDetection.getClient(options);
     }
 
-    public void detect(FirebaseVisionImage visionImage, MethodChannel.Result result){
-        InputImage image = InputImage.fromBitmap(visionImage.getBitmap(), 180);
+    public void detect(byte[] path,  MethodChannel.Result result) throws IOException {
+
+        InputImage image = InputImage.fromByteArray(path, 450, 800, 90, InputImage.IMAGE_FORMAT_NV21);
         detector.process(image)
                 .addOnSuccessListener(
                         new OnSuccessListener<List<DetectedObject>>() {
@@ -46,5 +52,6 @@ public class CustomObjectDetector {
                             }
                         });
     }
+
 
 }

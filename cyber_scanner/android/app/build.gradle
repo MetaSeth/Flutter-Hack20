@@ -54,8 +54,6 @@ flutter {
 }
 
 dependencies {
-    // ...
-
     implementation 'com.google.mlkit:object-detection:16.0.0'
     implementation 'com.google.firebase:firebase-ml-vision:24.0.3'
 
