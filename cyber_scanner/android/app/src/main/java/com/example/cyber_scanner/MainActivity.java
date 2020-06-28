@@ -1,11 +1,19 @@
 package com.example.cyber_scanner;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.net.Uri;
+
 import androidx.annotation.NonNull;
 import androidx.exifinterface.media.ExifInterface;
 
+import com.google.firebase.ml.vision.common.FirebaseVisionImage;
 import com.google.firebase.ml.vision.common.FirebaseVisionImageMetadata;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.Map;
 
 import io.flutter.embedding.android.FlutterActivity;
 import io.flutter.embedding.engine.FlutterEngine;
@@ -48,6 +56,50 @@ public class MainActivity extends FlutterActivity {
                 throw new IllegalArgumentException(String.format("No rotation for: %d", rotation));
         }
     }
+    private FirebaseVisionImage dataToVisionImage(Map<String, Object> imageData) throws IOException {
+        String imageType = (String) imageData.get("type");
+        assert imageType != null;
+
+        switch (imageType) {
+            case "file":
+                final String imageFilePath = (String) imageData.get("path");
+                final int rotation = getImageExifOrientation(imageFilePath);
+
+                if (rotation == 0) {
+                    File file = new File(imageFilePath);
+                    return FirebaseVisionImage.fromFilePath(getApplicationContext(), Uri.fromFile(file));
+                }
+
+                Matrix matrix = new Matrix();
+                matrix.postRotate(rotation);
+
+                final Bitmap bitmap = BitmapFactory.decodeFile(imageFilePath);
+                final Bitmap rotatedBitmap =
+                        Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+
+                return FirebaseVisionImage.fromBitmap(rotatedBitmap);
+            case "bytes":
+                @SuppressWarnings("unchecked")
+                Map<String, Object> metadataData = (Map<String, Object>) imageData.get("metadata");
+
+                FirebaseVisionImageMetadata metadata =
+                        new FirebaseVisionImageMetadata.Builder()
+                                .setWidth((int) (double) metadataData.get("width"))
+                                .setHeight((int) (double) metadataData.get("height"))
+                                .setFormat(FirebaseVisionImageMetadata.IMAGE_FORMAT_NV21)
+                                .setRotation(getRotation((int) metadataData.get("rotation")))
+                                .build();
+
+                byte[] bytes = (byte[]) imageData.get("bytes");
+                assert bytes != null;
+
+                return FirebaseVisionImage.fromByteArray(bytes, metadata);
+            default:
+                throw new IllegalArgumentException(String.format("No image type for: %s", imageType));
+        }
+    }
+
+
 
     @Override
     public void configureFlutterEngine(@NonNull FlutterEngine flutterEngine) {
@@ -57,12 +109,14 @@ public class MainActivity extends FlutterActivity {
                 .setMethodCallHandler((call, result) -> {
                     switch (call.method){
                         case "ObjectDetector":
-
+                            FirebaseVisionImage image;
+                            Map<String, Object> imageData = call.arguments();
                             try {
-                                customObjectDetector.detect(call.argument("byte"), result);
-                            } catch (IOException e) {
-                                result.error("error", e.getMessage(), e);
-                                e.printStackTrace();
+                                image = dataToVisionImage(imageData);
+                                customObjectDetector.detect(image, result);
+                            } catch (IOException exception) {
+                                result.error("MLVisionDetectorIOError", exception.getLocalizedMessage(), null);
+                                return;
                             }
                             break;
 
