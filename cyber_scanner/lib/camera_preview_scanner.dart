@@ -5,6 +5,9 @@ import 'package:flutter/material.dart';
 import 'detector_painters.dart';
 
 class CameraPreviewScanner extends StatefulWidget {
+  final Function onStreaming;
+
+  const CameraPreviewScanner({Key key, this.onStreaming}) : super(key: key);
   @override
   State<StatefulWidget> createState() => _CameraPreviewScannerState();
 }
@@ -15,13 +18,6 @@ class _CameraPreviewScannerState extends State<CameraPreviewScanner> {
 
   bool _isDetecting = false;
   CameraLensDirection _direction = CameraLensDirection.back;
-
-  List<Rect> listObjectLocations = [];
-
-  List<List<double>> testlistObjectLocations = [
-    [200.0, 200.0, 400.0, 400.0],
-    [50.0, 500.0, 100.0, 100.0]
-  ];
 
   @override
   void initState() {
@@ -45,6 +41,7 @@ class _CameraPreviewScannerState extends State<CameraPreviewScanner> {
     await _camera.initialize();
 
     _camera.startImageStream((CameraImage image) {
+      widget.onStreaming(image,description.sensorOrientation);
       if (_isDetecting) return;
 
       setState(() {
@@ -68,7 +65,7 @@ class _CameraPreviewScannerState extends State<CameraPreviewScanner> {
     if (testlistObjectLocations.length > 0) {
       return CustomPaint(
         painter: ObjectDetectorPainter(
-            imageSize, buildObjectLocations(testlistObjectLocations)),
+            imageSize, buildObjectLocations(listObjectLocations)),
       );
     } else
       return noResultsText;
@@ -87,32 +84,24 @@ class _CameraPreviewScannerState extends State<CameraPreviewScanner> {
 
   Widget buildImage() {
     return Container(
-        child: _camera == null
-            ? const Center(
-                child: Text(
-                  'Initializing Camera...',
-                  style: TextStyle(
-                    color: Colors.green,
-                    fontSize: 30.0,
-                  ),
+      child: _camera == null
+          ? const Center(
+              child: Text(
+                'Cyber connection',
+                style: TextStyle(
+                  color: Color(0x0492D5),
+                  fontSize: 30.0,
                 ),
-              )
-            : Stack(
-                fit: StackFit.expand,
-                children: <Widget>[
-                  CameraPreview(_camera),
-                  _buildResults(),
-                ],
-              ));
-/*            : const Center(
-                child: Text(
-                  'Please grant permission to use the camera for this app',
-                  style: TextStyle(
-                    color: Colors.green,
-                    fontSize: 30.0,
-                  ),
-                ),
-              ));*/
+              ),
+            )
+          : Stack(
+              fit: StackFit.expand,
+              children: <Widget>[
+                CameraPreview(_camera),
+                // _buildResults(),
+              ],
+            ),
+    );
   }
 
   @override

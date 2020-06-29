@@ -24,6 +24,7 @@ dependencies:
   flutter:
     sdk: flutter
   camera: ^0.5.8+2
+  firebase_ml_vision: ^0.9.4
   permission_handler: ^5.0.1+1
 
 
