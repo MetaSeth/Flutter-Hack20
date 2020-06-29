@@ -11,7 +11,7 @@ class CameraPreviewScanner extends StatefulWidget {
 }
 
 class _CameraPreviewScannerState extends State<CameraPreviewScanner> {
-  dynamic _scanResults;
+
   CameraController _camera;
 
   bool _isDetecting = false;
@@ -42,7 +42,9 @@ class _CameraPreviewScannerState extends State<CameraPreviewScanner> {
       widget.onStreaming(image,description.sensorOrientation);
       if (_isDetecting) return;
 
-      _isDetecting = true;
+      setState(() {
+        _isDetecting = true;
+      });
     });
 
   }
@@ -52,9 +54,9 @@ class _CameraPreviewScannerState extends State<CameraPreviewScanner> {
       child: _camera == null
           ? const Center(
               child: Text(
-                'Initializing Camera...',
+                'Cyber connection',
                 style: TextStyle(
-                  color: Colors.green,
+                  color: Color(0x0492D5),
                   fontSize: 30.0,
                 ),
               ),

@@ -3,7 +3,9 @@ package com.example.cyber_scanner;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.graphics.Rect;
 import android.net.Uri;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.exifinterface.media.ExifInterface;
@@ -13,6 +15,7 @@ import com.google.firebase.ml.vision.common.FirebaseVisionImageMetadata;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 
 import io.flutter.embedding.android.FlutterActivity;
@@ -100,7 +103,15 @@ public class MainActivity extends FlutterActivity {
     }
 
 
-
+    private Map<String, Integer> getDrawingScreenSize() {
+        View rootView = getWindow().getDecorView().getRootView();
+        Rect drawingRect = new Rect();
+        rootView.getDrawingRect(drawingRect);
+        Map<String, Integer> res = new HashMap<String, Integer>();
+        res.put("width", drawingRect.right - drawingRect.left);
+        res.put("height", drawingRect.bottom - drawingRect.top) ;
+        return res;
+    }
     @Override
     public void configureFlutterEngine(@NonNull FlutterEngine flutterEngine) {
         GeneratedPluginRegistrant.registerWith(flutterEngine);
@@ -118,6 +129,9 @@ public class MainActivity extends FlutterActivity {
                                 result.error("MLVisionDetectorIOError", exception.getLocalizedMessage(), null);
                                 return;
                             }
+                            break;
+                        case "drawingSize":
+                            result.success(getDrawingScreenSize());
                             break;
 
                     }
