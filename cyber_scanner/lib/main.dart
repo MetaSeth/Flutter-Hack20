@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: MyHomePage(title: 'CyberScan'),
     );
   }
 }
@@ -67,7 +67,9 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: Text(widget.title),
+
       ),
       body: Stack(
         children: <Widget>[
@@ -88,11 +90,7 @@ class _MyHomePageState extends State<MyHomePage> {
           )
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: null,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
-      ),
+
     );
   }
 }
